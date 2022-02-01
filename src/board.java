@@ -158,10 +158,8 @@ public class board {
             }
         }
         currentTrans = currentTrans.substring(0,130)+((int) currentTrans.charAt(130)-49);
-        if(transTable.containsKey(currentTrans.substring(0,15))){
-            if(((HashMap)transTable.get(currentTrans.substring(0,15))).containsKey(currentTrans.substring(15))){
-                possibleWords = (ArrayList<String>) ((HashMap)transTable.get(currentTrans.substring(0,15))).get(currentTrans.substring(15));
-            }
+        if(transTable.containsKey(currentTrans.substring(0,15)) && ((HashMap)transTable.get(currentTrans.substring(0,15))).containsKey(currentTrans.substring(15))){
+            possibleWords = (ArrayList<String>) ((HashMap)transTable.get(currentTrans.substring(0,15))).get(currentTrans.substring(15));
         }else {
             for (int i = 0; i < 5; i++) {
                 if (result[i] == 0) {
@@ -210,7 +208,7 @@ public class board {
                             }
                             //System.out.println(currentTrans);
                             //sum += countTemp;
-                            System.out.println("" + a + b + c + d + e + " " + word + ": " + countTemp + " " + currentTrans);
+                            //System.out.println("" + a + b + c + d + e + " " + word + ": " + countTemp + " " + currentTrans);
                             currentTrans = tempTrans;
                             possibleWords = (ArrayList<String>) ((ArrayList<String>) ((HashMap) transTable.get(tempTrans.substring(0,15))).get(tempTrans.substring(15))).clone();
                             if(countTemp >= minimum){
