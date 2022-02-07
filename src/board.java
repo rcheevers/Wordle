@@ -185,47 +185,54 @@ public class board {
         //System.out.println(word + ": " + currentTrans);
         //System.out.println(possibleWords.size());
         //int sum = 0;
+        String worst = "";
         int maximum = 0;
         for(int a = 0;a<3;a++){
             for(int b = 0;b<3;b++){
                 for(int c = 0;c<3;c++){
                     for(int d = 0;d<3;d++){
-                        for(int e = 0;e<3;e++){
+                        for(int e = 0;e<3;e++) {
                             int countTemp;
-                            int[] result = {a,b,c,d,e};
+                            int[] result = {a, b, c, d, e};
                             //System.out.println(currentTrans);
-                            words(word,result);
-                            if(depth > 1){
-                                if(possibleWords.size() <= maximum){//change back to maximum
+                            words(word, result);
+                            //if(depth>1){
+                                //System.out.println("" + a + b + c + d + e + " " + word + ": " + " " + currentTrans);
+                            //}
+                            if (depth > 1) {
+                                if (possibleWords.size() <= maximum) {//change back to maximum
                                     currentTrans = tempTrans;
-                                    possibleWords = (ArrayList<String>) ((ArrayList<String>) ((HashMap) transTable.get(tempTrans.substring(0,15))).get(tempTrans.substring(15))).clone();
+                                    possibleWords = (ArrayList<String>) ((ArrayList<String>) ((HashMap) transTable.get(tempTrans.substring(0, 15))).get(tempTrans.substring(15))).clone();
                                     continue;
                                 }
                                 String s = miniMax(depth - 1, maximum)[1];
                                 countTemp = Integer.parseInt(s);
-                            }else{
+                            } else {
                                 countTemp = possibleWords.size();
                             }
                             //System.out.println(currentTrans);
                             //sum += countTemp;
-                            //System.out.println("" + a + b + c + d + e + " " + word + ": " + countTemp + " " + currentTrans);
                             currentTrans = tempTrans;
                             possibleWords = (ArrayList<String>) ((ArrayList<String>) ((HashMap) transTable.get(tempTrans.substring(0,15))).get(tempTrans.substring(15))).clone();
                             if(countTemp >= minimum){
                                 return countTemp;
                             } else if(countTemp>maximum){
                                 maximum = countTemp;
+                                worst = ""+a+b+c+d+e;
                             }
                         }
                     }
                 }
             }
         }
-        /*if(sum != possibleWords.size()){
+        /*
+        if(sum != possibleWords.size()){
             //System.out.println("ERROR PLEASE FIX!!!!!!!!!");//changed back to maximum
             return maximum;
-        }*/
+        }
+        */
         //System.out.println(sum);
+        //System.out.println(worst);
         return maximum;
     }
 
@@ -235,6 +242,7 @@ public class board {
         for(int i = 0;i<guesses.size();i++){
             int tempMin = maximum(guesses.get(i),depth,minimum);
             if(tempMin == 0){
+                System.out.println("here");
                 return new String[] {guesses.get(i),"0"};
             }
             if(depth>1) {
@@ -264,7 +272,11 @@ public class board {
             int tempMin = maximum(guesses.get(i),1,10000);
             String count = String.valueOf(tempMin);
             stuff.add(count.length()+" "+count+"     "+guesses.get(i));
-            System.out.println(guesses.get(i)+": "+count);
+        }
+        for(int i = 0;i<possibleWords.size();i++){
+            int tempMin = maximum(possibleWords.get(i),1,10000);
+            String count = String.valueOf(tempMin);
+            stuff.add(count.length()+" "+count+"     "+possibleWords.get(i));
         }
         stuff.sort(Comparator.naturalOrder());
         return stuff;
