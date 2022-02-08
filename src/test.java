@@ -8,22 +8,26 @@ import java.util.Scanner;
 public class test {
     public static void main(String[] args) {
         board obj = createBoard();
-        //System.out.println(obj.transpositionTable(obj.currentTrans));
-        //obj.words("aloes",new int[] {0,1,0,0,0});
-        //obj.words("murly",new int[] {0,0,0,1,0});
-        //obj.words("aiery",new int[] {0,0,1,0,0});
-        //obj.words("togai",new int[] {0,2,0,0,0});
-        //System.out.println(obj.currentTrans);
-        //obj.list();
-        //System.out.println(obj.possibleWords.size());
-        //System.out.println(obj.possibleWords.size());
-        //System.out.println(obj.maximum("arsey",1,10000));
-        long start = System.nanoTime();
-        String[] result = obj.miniMax(1,1);
-        System.out.println(result[0]+": "+result[1]);
-        long end = System.nanoTime();
-        System.out.println(end-start);
 
+        //obj.words("aloes",new int[] {0,2,0,2,0});
+        //obj.words("duply",new int[] {0,0,0,0,0});
+        //obj.words("orate",new int[] {0,1,0,0,1});
+        //obj.words("sengi",new int[] {0,1,0,0,1});
+        //obj.words("rabis",new int[] {1,0,0,1,0});
+        //obj.maximum("nitry",1,10000);
+
+        //System.out.println(obj.transpositionTable(obj.currentTrans));
+        //System.out.println(obj.currentTrans);
+        //System.out.println(obj.transTable.get("_____","","00000000000000000000000000").size());
+        //obj.list();
+
+        //long start = System.nanoTime();
+
+        String[] result = obj.miniMax(2,1);
+        System.out.println(result[0]+": "+result[1]);
+        //long end = System.nanoTime();
+        //System.out.println(end-start);
+        //System.out.println(obj.possibleWords.size());
     }
 
     public static void save(ArrayList<String> results){
@@ -63,16 +67,15 @@ public class test {
         try {
             File myObj = new File("src/sortedOptions.txt");
             Scanner myReader = new Scanner(myObj);
-            while (myReader.hasNextLine()) {
+            while(myReader.hasNextLine()){
                 line = myReader.nextLine();
-                guesses.add(line.substring(line.length() - 5));
+                guesses.add(line.substring(line.length()-5));
             }
             myReader.close();
         } catch (FileNotFoundException e) {
             System.out.println("An error occurred.");
             e.printStackTrace();
         }
-
 
         board obj = new board(guesses, possibleWords);
         return obj;

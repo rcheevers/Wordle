@@ -1,20 +1,21 @@
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 
 public class board {
     ArrayList<String> guesses;
     ArrayList<String> possibleWords;
-    HashMap transTable;
-    String currentTrans;
+    transTable transTable;
+    String currentTrans1;
+    String currentTrans2;
+    String currentTrans3;
 
     public board(ArrayList<String> words,ArrayList<String> tempWords) {
         guesses = words;
         possibleWords = tempWords;
-        currentTrans = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000009";
-        transTable = new HashMap();
-        transTable.put(currentTrans.substring(0,15),new HashMap<>());
-        ((HashMap) transTable.get(currentTrans.substring(0,15))).put(currentTrans.substring(15),possibleWords.clone());
+        currentTrans1 = "_____";
+        currentTrans2 = "";
+        currentTrans3 = "00000000000000000000000000";
+        transTable = new transTable(currentTrans1,currentTrans2,currentTrans3,possibleWords);
     }
 
     public void list(){
@@ -57,109 +58,13 @@ public class board {
         }
     }
 
-    public boolean check2s(int letter){// false is error, true is all good.
-        int place = 0;
-        int sum = 0;
-        for(int j = 0; j < 5; j++){
-            if(currentTrans.charAt(j*26+letter) == '2'){
-                sum += 1;
-                place = j;
-            }
-        }
-        if(sum == 0){
-            return false;
-        }else if(sum == 1){
-            //currentTrans = currentTrans.substring(0, (place) * 26 + letter) + "3" + currentTrans.substring((place) * 26 + letter + 1);
-            for (int j = 0; j < 26; j++) {
-                if (j != letter) {
-                    if (currentTrans.charAt(place * 26 + j) == '3') {
-                        return false;
-                    } else if (currentTrans.charAt(place * 26 + j) == '2') {
-                        currentTrans = currentTrans.substring(0, (place) * 26 + j) + "1" + currentTrans.substring((place) * 26 + j + 1);
-                        if(!check2s(j)){
-                            return false;
-                        }
-                    } else {
-                        currentTrans = currentTrans.substring(0, (place) * 26 + j) + "1" + currentTrans.substring((place) * 26 + j + 1);
-                    }
-                }
-            }
-        }
-        return true;
-    }
-
     public void words(String word,int[] result){
-        for(int i = 0;i<5;i++){
-            if(result[i]==0){
-                for(int j = 0;j<5;j++) {
-                    if(currentTrans.charAt(j*26+(int)word.charAt(i)-97) == '3' || currentTrans.charAt(j*26+(int)word.charAt(i)-97) == '2'){
-                        currentTrans = "";
-                        possibleWords = new ArrayList<>();
-                        return;
-                    }else {
-                        currentTrans = currentTrans.substring(0, (j) * 26 + (int) word.charAt(i) - 97) + "1" + currentTrans.substring((j) * 26 + ((int) word.charAt(i) - 97) + 1);
-                    }
-                }
-            }else if(result[i]==1){
-                if(currentTrans.charAt(0*26+(int)word.charAt(i)-97) == '1' && currentTrans.charAt(1*26+(int)word.charAt(i)-97) == '1' && currentTrans.charAt(2*26+(int)word.charAt(i)-97) == '1' && currentTrans.charAt(3*26+(int)word.charAt(i)-97) == '1' && currentTrans.charAt(4*26+(int)word.charAt(i)-97) == '1'){
-                    currentTrans = "";
-                    possibleWords = new ArrayList<>();
-                    return;
-                }
-                for(int j = 0;j<5;j++){
-                    if(currentTrans.charAt(j*26+(int)word.charAt(i)-97) == '0')
-                        currentTrans = currentTrans.substring(0,(j)*26+(int)word.charAt(i)-97)+"2"+currentTrans.substring((j)*26+((int)word.charAt(i)-97)+1);
-                }
-                if(!check2s((int)word.charAt(i)-97)){
-                    currentTrans = "";
-                    possibleWords = new ArrayList<>();
-                    return;
-                }
-                if(currentTrans.charAt(i*26+(int)word.charAt(i)-97) == '3'){
-                    currentTrans = "";
-                    possibleWords = new ArrayList<>();
-                    return;
-                }else {
-                    currentTrans = currentTrans.substring(0, (i) * 26 + (int) word.charAt(i) - 97) + "1" + currentTrans.substring((i) * 26 + ((int) word.charAt(i) - 97) + 1);
-                }
-            }else{
-                if(currentTrans.charAt(i*26+(int)word.charAt(i)-97) == '1') {
-                    currentTrans = "";
-                    possibleWords = new ArrayList<>();
-                    return;
-                } else {
-                    for (int j = 0; j < 26; j++) {
-                        if (j != word.charAt(i) - 97) {
-                            if (currentTrans.charAt(i * 26 + j) == '3') {
-                                currentTrans = "";
-                                possibleWords = new ArrayList<>();
-                                return;
-                            } else if(currentTrans.charAt(i * 26 + j) == '2') {
-                                if (!check2s(j)){
-                                    currentTrans = "";
-                                    possibleWords = new ArrayList<>();
-                                    return;
-                                }
-                            } else {
-                                currentTrans = currentTrans.substring(0, (i) * 26 + j) + "1" + currentTrans.substring((i) * 26 + j + 1);
-                            }
-                        } else {
-                            if(currentTrans.charAt(i*26+(int)word.charAt(i)-97) == '2') {
-                                currentTrans = currentTrans.substring(0, (i) * 26 + j) + "1" + currentTrans.substring((i) * 26 + j + 1);
-                                if(!check2s((int)word.charAt(i)-97)){
-                                    currentTrans = "";
-                                    possibleWords = new ArrayList<>();
-                                    return;
-                                }                            }
-                            currentTrans = currentTrans.substring(0, (i) * 26 + (int) word.charAt(i) - 97) + "3" + currentTrans.substring((i) * 26 + ((int) word.charAt(i) - 97) + 1);
-                        }
-                    }
-                }
-            }
-        }
-        currentTrans = currentTrans.substring(0,130)+((int) currentTrans.charAt(130)-49);
-        if(transTable.containsKey(currentTrans.substring(0,15)) && ((HashMap)transTable.get(currentTrans.substring(0,15))).containsKey(currentTrans.substring(15))){
-            possibleWords = (ArrayList<String>) ((HashMap)transTable.get(currentTrans.substring(0,15))).get(currentTrans.substring(15));
+        String[] trans = transTable.updateCurrent(currentTrans1,currentTrans2,currentTrans3,word,result);
+        currentTrans1 = trans[0];
+        currentTrans2 = trans[1];
+        currentTrans3 = trans[2];
+        if(transTable.contains(currentTrans1,currentTrans2,currentTrans3)){
+            possibleWords = transTable.get(currentTrans1,currentTrans2,currentTrans3);
         }else {
             for (int i = 0; i < 5; i++) {
                 if (result[i] == 0) {
@@ -171,21 +76,18 @@ public class board {
                     addPos(word.charAt(i), i);
                 }
             }
-            if(transTable.containsKey(currentTrans.substring(0,15))){
-                ((HashMap) transTable.get(currentTrans.substring(0,15))).put(currentTrans.substring(15),possibleWords.clone());
-            }else{
-                transTable.put(currentTrans.substring(0,15),new HashMap<>());
-                ((HashMap) transTable.get(currentTrans.substring(0,15))).put(currentTrans.substring(15),possibleWords.clone());
-            }
+            transTable.put(currentTrans1,currentTrans2,currentTrans3,possibleWords);
         }
     }
 
     public int maximum(String word,int depth,int minimum){
-        String tempTrans = currentTrans;
+        String tempTrans1 = currentTrans1;
+        String tempTrans2 = currentTrans2;
+        String tempTrans3 = currentTrans3;
         //System.out.println(word + ": " + currentTrans);
         //System.out.println(possibleWords.size());
         //int sum = 0;
-        String worst = "";
+        //String worst = "";
         int maximum = 0;
         for(int a = 0;a<3;a++){
             for(int b = 0;b<3;b++){
@@ -194,15 +96,13 @@ public class board {
                         for(int e = 0;e<3;e++) {
                             int countTemp;
                             int[] result = {a, b, c, d, e};
-                            //System.out.println(currentTrans);
                             words(word, result);
-                            //if(depth>1){
-                                //System.out.println("" + a + b + c + d + e + " " + word + ": " + " " + currentTrans);
-                            //}
                             if (depth > 1) {
                                 if (possibleWords.size() <= maximum) {//change back to maximum
-                                    currentTrans = tempTrans;
-                                    possibleWords = (ArrayList<String>) ((ArrayList<String>) ((HashMap) transTable.get(tempTrans.substring(0, 15))).get(tempTrans.substring(15))).clone();
+                                    currentTrans1 = tempTrans1;
+                                    currentTrans2 = tempTrans2;
+                                    currentTrans3 = tempTrans3;
+                                    possibleWords = transTable.get(currentTrans1,currentTrans2,currentTrans3);
                                     continue;
                                 }
                                 String s = miniMax(depth - 1, maximum)[1];
@@ -210,15 +110,19 @@ public class board {
                             } else {
                                 countTemp = possibleWords.size();
                             }
+                            //System.out.println("" + a + b + c + d + e + " " + word + ": " +countTemp+ " " + currentTrans1+"|"+currentTrans2+"|"+currentTrans3);
+                            //System.out.println(possibleWords);
                             //System.out.println(currentTrans);
                             //sum += countTemp;
-                            currentTrans = tempTrans;
-                            possibleWords = (ArrayList<String>) ((ArrayList<String>) ((HashMap) transTable.get(tempTrans.substring(0,15))).get(tempTrans.substring(15))).clone();
+                            currentTrans1 = tempTrans1;
+                            currentTrans2 = tempTrans2;
+                            currentTrans3 = tempTrans3;
+                            possibleWords = transTable.get(currentTrans1,currentTrans2,currentTrans3);
                             if(countTemp >= minimum){
                                 return countTemp;
                             } else if(countTemp>maximum){
                                 maximum = countTemp;
-                                worst = ""+a+b+c+d+e;
+                                //worst = ""+a+b+c+d+e;
                             }
                         }
                     }
@@ -242,7 +146,8 @@ public class board {
         for(int i = 0;i<guesses.size();i++){
             int tempMin = maximum(guesses.get(i),depth,minimum);
             if(tempMin == 0){
-                System.out.println("here");
+                System.out.println("error: min returned 0");
+                breakpoint();
                 return new String[] {guesses.get(i),"0"};
             }
             if(depth>1) {
@@ -264,6 +169,10 @@ public class board {
         String[] result = {guesses.get(place), String.valueOf(minimum)};
         //System.out.println("1: "+guesses.get(place)+": "+minimum+" depth: "+ depth);
         return result;
+    }
+
+    public void breakpoint(){
+        breakpoint();
     }
 
     public ArrayList<String> sort(){
