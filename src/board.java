@@ -12,7 +12,7 @@ public class board {
     public board(ArrayList<String> words,ArrayList<String> tempWords) {
         guesses = words;
         possibleWords = tempWords;
-        currentTrans1 = "_____";
+        currentTrans1 = "_____0";
         currentTrans2 = "";
         currentTrans3 = "00000000000000000000000000";
         transTable = new transTable(currentTrans1,currentTrans2,currentTrans3,possibleWords);
@@ -59,24 +59,15 @@ public class board {
     }
 
     public void words(String word,int[] result){
-        String[] trans = transTable.updateCurrent(currentTrans1,currentTrans2,currentTrans3,word,result);
-        currentTrans1 = trans[0];
-        currentTrans2 = trans[1];
-        currentTrans3 = trans[2];
-        if(transTable.contains(currentTrans1,currentTrans2,currentTrans3)){
-            possibleWords = transTable.get(currentTrans1,currentTrans2,currentTrans3);
-        }else {
-            for (int i = 0; i < 5; i++) {
-                if (result[i] == 0) {
-                    remove(word.charAt(i));
-                } else if (result[i] == 1) {
-                    add(word.charAt(i));
-                    removePos(word.charAt(i), i);
-                } else {
-                    addPos(word.charAt(i), i);
-                }
+        for (int i = 0; i < 5; i++) {
+            if (result[i] == 0) {
+                remove(word.charAt(i));
+            } else if (result[i] == 1) {
+                add(word.charAt(i));
+                removePos(word.charAt(i), i);
+            } else {
+                addPos(word.charAt(i), i);
             }
-            transTable.put(currentTrans1,currentTrans2,currentTrans3,possibleWords);
         }
     }
 
@@ -84,6 +75,7 @@ public class board {
         String tempTrans1 = currentTrans1;
         String tempTrans2 = currentTrans2;
         String tempTrans3 = currentTrans3;
+        ArrayList<String> tempList = (ArrayList<String>) possibleWords.clone();
         //System.out.println(word + ": " + currentTrans);
         //System.out.println(possibleWords.size());
         //int sum = 0;
@@ -96,19 +88,30 @@ public class board {
                         for(int e = 0;e<3;e++) {
                             int countTemp;
                             int[] result = {a, b, c, d, e};
-                            words(word, result);
-                            if (depth > 1) {
-                                if (possibleWords.size() <= maximum) {//change back to maximum
-                                    currentTrans1 = tempTrans1;
-                                    currentTrans2 = tempTrans2;
-                                    currentTrans3 = tempTrans3;
-                                    possibleWords = transTable.get(currentTrans1,currentTrans2,currentTrans3);
-                                    continue;
+                            String[] trans = transTable.updateCurrent(currentTrans1,currentTrans2,currentTrans3,word,result);
+                            currentTrans1 = trans[0];
+                            currentTrans2 = trans[1];
+                            currentTrans3 = trans[2];
+                            if(transTable.contains(currentTrans1,currentTrans2,currentTrans3)) {
+                                countTemp = transTable.get(currentTrans1, currentTrans2, currentTrans3);
+                            }
+                            else {
+                                words(word, result);
+                                if (depth > 1) {
+                                    if (possibleWords.size() <= maximum) {//change back to maximum
+                                        currentTrans1 = tempTrans1;
+                                        currentTrans2 = tempTrans2;
+                                        currentTrans3 = tempTrans3;
+                                        possibleWords = (ArrayList<String>) tempList.clone();
+                                        continue;
+                                    }
+                                    String s = miniMax(depth - 1, maximum)[1];
+                                    countTemp = Integer.parseInt(s);
+                                    transTable.put(currentTrans1,currentTrans2,currentTrans3,countTemp);
+                                } else {
+                                    countTemp = possibleWords.size();
+                                    //transTable.put(currentTrans1,currentTrans2,currentTrans3,countTemp);
                                 }
-                                String s = miniMax(depth - 1, maximum)[1];
-                                countTemp = Integer.parseInt(s);
-                            } else {
-                                countTemp = possibleWords.size();
                             }
                             //System.out.println("" + a + b + c + d + e + " " + word + ": " +countTemp+ " " + currentTrans1+"|"+currentTrans2+"|"+currentTrans3);
                             //System.out.println(possibleWords);
@@ -117,7 +120,7 @@ public class board {
                             currentTrans1 = tempTrans1;
                             currentTrans2 = tempTrans2;
                             currentTrans3 = tempTrans3;
-                            possibleWords = transTable.get(currentTrans1,currentTrans2,currentTrans3);
+                            possibleWords = (ArrayList<String>) tempList.clone();
                             if(countTemp >= minimum){
                                 return countTemp;
                             } else if(countTemp>maximum){

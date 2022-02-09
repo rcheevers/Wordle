@@ -10,8 +10,8 @@ public class test {
         board obj = createBoard();
 
         //obj.words("aloes",new int[] {0,2,0,2,0});
-        //obj.words("duply",new int[] {0,0,0,0,0});
-        //obj.words("orate",new int[] {0,1,0,0,1});
+        //obj.words("aesir",new int[] {0,0,0,0,0});
+        //obj.words("duply",new int[] {0,1,0,0,0});
         //obj.words("sengi",new int[] {0,1,0,0,1});
         //obj.words("rabis",new int[] {1,0,0,1,0});
         //obj.maximum("nitry",1,10000);
@@ -27,7 +27,7 @@ public class test {
         System.out.println(result[0]+": "+result[1]);
         //long end = System.nanoTime();
         //System.out.println(end-start);
-        //System.out.println(obj.possibleWords.size());
+        System.out.println(obj.possibleWords.size());
     }
 
     public static void save(ArrayList<String> results){

@@ -8,14 +8,10 @@ public class transTable {
 
     public transTable(String current1,String current2,String current3,ArrayList<String> possibleWords){
         table1 = new HashMap();
-        HashMap table2 = new HashMap();
-        HashMap table3 = new HashMap();
-        table3.put(current3,possibleWords.clone());
-        table2.put(current2,table3);
-        table1.put(current1,table2);
     }
 
     public String[] updateCurrent(String current1,String current2,String current3,String word,int[] result){
+        current1 = current1.substring(0,5)+(current1.charAt(5)-47);
         for(int i = 0;i<5;i++){
             if(result[i]==0){
                 int letter = (int) word.charAt(i)-97;
@@ -35,6 +31,9 @@ public class transTable {
                         letters.add(j);
                     }
                 }
+                if(letters.size()>5){
+                    return error;
+                }
                 ArrayList<String> parts = new ArrayList<>(); //split current2 into parts based on letters
                 boolean inParts = false;
                 for(int j = 0;j<letters.size();j++){
@@ -51,6 +50,9 @@ public class transTable {
                             places.add(i);
                         }
                         places.add(i);// add place
+                        if(places.size()>4){
+                            return error;
+                        }
                         places.sort(Comparator.naturalOrder());//sort
                         part = part.substring(0,1);
                         for(int k = 0;k<places.size();k++){//reconstruct part
@@ -91,36 +93,33 @@ public class transTable {
         return false;
     }
 
-    public ArrayList<String> get(String current1,String current2,String current3){
+    public int get(String current1,String current2,String current3){
         if(this.contains(current1,current2,current3)){
             HashMap table2 = (HashMap) table1.get(current1);
             HashMap table3 = (HashMap) table2.get(current2);
-            ArrayList<String> possibleWords = (ArrayList<String>) table3.get(current3);
-            return (ArrayList<String>) possibleWords.clone();
+            int stored = (int) table3.get(current3);
+            return stored;
         }
-        ArrayList<String> Error = new ArrayList<String>();
-        Error.add("Error");
-        return Error;
+        return -1;
     }
 
-    public void put(String current1,String current2,String current3,ArrayList<String> possibleWords){
-        possibleWords = (ArrayList<String>) possibleWords.clone();
+    public void put(String current1,String current2,String current3,int value){
         if(table1.containsKey(current1)){
             HashMap table2 = (HashMap) table1.get(current1);
             if(table2.containsKey(current2)){
                 HashMap table3 = (HashMap) table2.get(current2);
-                table3.put(current3,possibleWords);
+                table3.put(current3,value);
             }else{
                 HashMap table3 = new HashMap();
                 table2.put(current2,table3);
-                table3.put(current3,possibleWords);
+                table3.put(current3,value);
             }
         }else{
             HashMap table2 = new HashMap();
             HashMap table3 = new HashMap();
             table1.put(current1,table2);
             table2.put(current2,table3);
-            table3.put(current3,possibleWords);
+            table3.put(current3,value);
         }
     }
 }
