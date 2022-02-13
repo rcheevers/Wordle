@@ -1,0 +1,7 @@
+fix transpostion table keys so maximum will never return 0
+sort guesses before calling miniMax/expectiMin so more can be pruned
+sort results for maximum
+make sure pruning works for expectiMin (I doubt it does)
+
+store transposition tables in a way that I won't run out of memory and I can store values between sessions.
+add possible word list, length for depth, and word for depth to transpostion tables.
