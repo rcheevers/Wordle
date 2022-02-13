@@ -73,7 +73,7 @@ public class possibleWords {
     public ArrayList<String> sort(ArrayList<String> guesses){
         ArrayList<String> stuff = new ArrayList<>();
         for(int i = 0;i<guesses.size();i++){
-            int tempMin = board.maximum(guesses.get(i),1,10000,this.clone(),guesses);
+            int tempMin = board.maximum(guesses.get(i),1,1,10000,this.clone(),guesses);
             String count = String.valueOf(tempMin);
             if(tempMin != 0){
                 stuff.add(count.length()+" "+count+"     "+guesses.get(i));

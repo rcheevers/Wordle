@@ -14,12 +14,11 @@ public class test {
         //wordList.words("prink",new int[] {0,1,0,0,0});
         //wordList.words("aurei",new int[] {1,0,0,0,0});
         //wordList.words("ymolt",new int[] {0,0,0,1,0});
-        //wordList.maximum("nitry",1,10000);
         //wordList.list();
         //guesses = wordList.sort(guesses);
 
         long start = System.nanoTime();
-        String[] result = board.miniMax(2,1,wordList,guesses);
+        String[] result = board.miniMax(2,1,10000,wordList,guesses);
         System.out.println(result[0]+": "+result[1]);
         long end = System.nanoTime();
         System.out.println(end-start);
