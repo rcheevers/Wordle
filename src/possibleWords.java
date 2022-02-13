@@ -70,10 +70,28 @@ public class possibleWords {
         }
     }
 
-    public ArrayList<String> sort(ArrayList<String> guesses){
+    public ArrayList<String> sortMax(ArrayList<String> guesses){
         ArrayList<String> stuff = new ArrayList<>();
         for(int i = 0;i<guesses.size();i++){
             int tempMin = board.maximum(guesses.get(i),1,1,10000,this.clone(),guesses);
+            String count = String.valueOf(tempMin);
+            if(tempMin != 0){
+                stuff.add(count.length()+" "+count+"     "+guesses.get(i));
+            }
+        }
+        stuff.sort(Comparator.naturalOrder());
+        ArrayList<String> result = new ArrayList<>();
+        for(int i = 0;i<stuff.size();i++){
+            //System.out.println(stuff.get(i));
+            result.add(stuff.get(i).substring(stuff.get(i).length()-5));
+        }
+        return result;
+    }
+
+    public ArrayList<String> sortExpected(ArrayList<String> guesses){
+        ArrayList<String> stuff = new ArrayList<>();
+        for(int i = 0;i<guesses.size();i++){
+            float tempMin = board.expected(guesses.get(i),1,1,10000,this.clone(),guesses);
             String count = String.valueOf(tempMin);
             if(tempMin != 0){
                 stuff.add(count.length()+" "+count+"     "+guesses.get(i));
