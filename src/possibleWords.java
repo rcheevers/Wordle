@@ -64,37 +64,45 @@ public class possibleWords {
         }
     }
 
+    public void word(String words,String nums){
+        for (int i = 0; i < words.length(); i+=5) {
+            String letters = words.substring(i,i+5);
+            int a = nums.charAt(i)-48;
+            int b = nums.charAt(i+1)-48;
+            int c = nums.charAt(i+2)-48;
+            int d = nums.charAt(i+3)-48;
+            int e = nums.charAt(i+4)-48;
+            words(letters,new int[] {a,b,c,d,e});
+        }
+    }
+
     public void list(){
         for(int i = 0;i<words.size();i++){
             System.out.println(words.get(i));
         }
     }
 
-    public ArrayList<String> sortMax(ArrayList<String> guesses){
+    public ArrayList<String> sortMax(ArrayList<String> guesses, int depth){
         ArrayList<String> stuff = new ArrayList<>();
         for(int i = 0;i<guesses.size();i++){
-            int tempMin = board.maximum(guesses.get(i),1,1,10000,this.clone(),guesses);
+            int tempMin = board.maximum(guesses.get(i),depth,10000,1,this.clone(),guesses);
+            //System.out.println("depth of " + depth + ": " + guesses.get(i)+" "+tempMin);
             String count = String.valueOf(tempMin);
             if(tempMin != 0){
                 stuff.add(count.length()+" "+count+"     "+guesses.get(i));
             }
         }
         stuff.sort(Comparator.naturalOrder());
-        ArrayList<String> result = new ArrayList<>();
-        for(int i = 0;i<stuff.size();i++){
-            //System.out.println(stuff.get(i));
-            result.add(stuff.get(i).substring(stuff.get(i).length()-5));
-        }
-        return result;
+        return stuff;
     }
 
-    public ArrayList<String> sortExpected(ArrayList<String> guesses){
+    public ArrayList<String> sortExpected(ArrayList<String> guesses,int depth){
         ArrayList<String> stuff = new ArrayList<>();
         for(int i = 0;i<guesses.size();i++){
-            float tempMin = board.expected(guesses.get(i),1,1,10000,this.clone(),guesses);
+            float tempMin = board.expected(guesses.get(i),depth,10000,1,this.clone(),guesses);
             String count = String.valueOf(tempMin);
             if(tempMin != 0){
-                stuff.add(count.length()+" "+count+"     "+guesses.get(i));
+                stuff.add(String.valueOf(Math.round(tempMin)).length()+" "+count+"     "+guesses.get(i));
             }
         }
         stuff.sort(Comparator.naturalOrder());
@@ -103,6 +111,6 @@ public class possibleWords {
             //System.out.println(stuff.get(i));
             result.add(stuff.get(i).substring(stuff.get(i).length()-5));
         }
-        return result;
+        return stuff;
     }
 }

@@ -46,20 +46,17 @@ public class board {
                 for(int c = 0;c<3;c++){
                     for(int d = 0;d<3;d++){
                         for(int e = 0;e<3;e++) {
-                            int countTemp;
+                            float countTemp;
                             int[] result = {a, b, c, d, e};
                             possibleWords tempWords = possibleWords.clone();
                             tempWords.words(word, result);
                             if (depth > 1) {
                                 String s = expectiMin(depth - 1, minimum,maximum,tempWords,guesses)[1];
-                                countTemp = Integer.parseInt(s);
+                                countTemp = Float.parseFloat(s);
                             } else {
                                 countTemp = tempWords.size();
                             }
                             value += countTemp*countTemp;
-                            if(countTemp >= minimum){
-                                return countTemp;
-                            }
                             if(value>maximum){
                                 maximum=value;
                             }
@@ -107,7 +104,7 @@ public class board {
                 continue;
             }
             if(depth>1) {
-                System.out.println("depth of " + depth + ": " + guesses.get(i)+" "+tempMin+"/"+minimum);
+                System.out.println("depth of " + depth + ": " + guesses.get(i)+" "+value+"/"+minimum);
             }
             if(tempMin<value){
                 value = tempMin;
@@ -121,7 +118,7 @@ public class board {
                 minimum = value;
             }
         }
-        String[] result = {guesses.get(place), String.valueOf(minimum)};
+        String[] result = {guesses.get(place), String.valueOf(value)};
         return result;
     }
 }
