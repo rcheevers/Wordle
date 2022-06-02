@@ -6,7 +6,7 @@ public class transTable {
     HashMap table1;
     static String[] error = new String[] {"error","",""};
 
-    public transTable(String current1,String current2,String current3,ArrayList<String> possibleWords){
+    public transTable(String current1,String current2,String current3){
         table1 = new HashMap();
     }
 

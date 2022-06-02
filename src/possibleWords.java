@@ -26,9 +26,9 @@ public class possibleWords {
         }
     }
 
-    private void remove(char letter){
-        for(int i = 0;i<5;i++){
-            removePos(letter,i);
+    private void remove(char letter, String word, int[] result){
+        for (int i = 0; i < 5; i++) {
+            removePos(letter, i);
         }
     }
 
@@ -54,7 +54,15 @@ public class possibleWords {
     public void words(String word,int[] result){
         for (int i = 0; i < 5; i++) {
             if (result[i] == 0) {
-                remove(word.charAt(i));
+                boolean flag = true;
+                for(int j = 0;j<5;j++){
+                    if(word.charAt(j) == word.charAt(i) && result[j] != 0){
+                        flag = false;
+                    }
+                }
+                if (flag) {
+                    remove(word.charAt(i), word, result);
+                }
             } else if (result[i] == 1) {
                 add(word.charAt(i));
                 removePos(word.charAt(i), i);
@@ -86,11 +94,9 @@ public class possibleWords {
         ArrayList<String> stuff = new ArrayList<>();
         for(int i = 0;i<guesses.size();i++){
             int tempMin = board.maximum(guesses.get(i),depth,10000,1,this.clone(),guesses);
-            //System.out.println("depth of " + depth + ": " + guesses.get(i)+" "+tempMin);
+            System.out.println(guesses.get(i)+" "+tempMin);
             String count = String.valueOf(tempMin);
-            if(tempMin != 0){
-                stuff.add(count.length()+" "+count+"     "+guesses.get(i));
-            }
+            stuff.add(count.length()+" "+count+"     "+guesses.get(i));
         }
         stuff.sort(Comparator.naturalOrder());
         return stuff;
@@ -101,14 +107,11 @@ public class possibleWords {
         for(int i = 0;i<guesses.size();i++){
             float tempMin = board.expected(guesses.get(i),depth,10000,1,this.clone(),guesses);
             String count = String.valueOf(tempMin);
-            if(tempMin != 0){
-                stuff.add(String.valueOf(Math.round(tempMin)).length()+" "+count+"     "+guesses.get(i));
-            }
+            stuff.add(String.valueOf(Math.round(tempMin)).length()+" "+count+"     "+guesses.get(i));
         }
         stuff.sort(Comparator.naturalOrder());
         ArrayList<String> result = new ArrayList<>();
         for(int i = 0;i<stuff.size();i++){
-            //System.out.println(stuff.get(i));
             result.add(stuff.get(i).substring(stuff.get(i).length()-5));
         }
         return stuff;

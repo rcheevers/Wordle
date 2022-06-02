@@ -9,12 +9,11 @@ public class test {
     public static void main(String[] args) {
         ArrayList<String> guesses = createGuesses();
         ArrayList<String> create = createWords();
-        possibleWords wordList;
-        ArrayList<String> options = createStuff();
-
-        for(int i = 0;i<options.size();i++) {
+        possibleWords wordList = new possibleWords(create);
+        //ArrayList<String> options = createStuff();
+        /*for(int i = 0;i<options.size();i++) {
             double sum = 1.0;
-            int count = 1;
+            int count = 0;
             for (int a = 0; a < 3; a++) {
                 for (int b = 0; b < 3; b++) {
                     for (int c = 0; c < 3; c++) {
@@ -22,9 +21,12 @@ public class test {
                             for (int e = 0; e < 3; e++) {
                                 int[] result = {a, b, c, d, e};
                                 wordList = new possibleWords(create);
-                                wordList.words(options.get(i), result);
-                                board.expectiMin(1, 10000, 1, wordList, guesses);
-                                if (wordList.size() > 0) {
+                                wordList.words("aurei", result);
+                                System.out.println(""+a+b+c+d+e+"");
+                                //board.expectiMin(1, 10000, 1, wordList, guesses);
+                                System.out.println(wordList.size());
+                                count+=wordList.size();
+                                /*if (wordList.size() > 0) {
                                     count += wordList.size();
                                 }
                                 if (wordList.size() > 1) {
@@ -39,22 +41,23 @@ public class test {
             System.out.println(sum);
             System.out.println(count);
             System.out.println(sum/count+"\n");
-        }
+        }*/
 
-        //wordList.word("craneicing", "0002010220");
-        // growl drowl glory prowl
-        // sunny skunk swung spunk
+        //wordList.word("aurie", "10000");
 
 
         //wordList.list();
-        //guesses = wordList.sortMax(guesses,1);
+        long start = System.nanoTime();
+        guesses = wordList.sortExpected(guesses,2);
+        long end = System.nanoTime();
+        System.out.println(end-start);
         //String[] result = board.miniMax(1,10000,1,wordList,guesses);
         //System.out.println(result[0]+": "+result[1]);
         //result = board.expectiMin(1,10000,1,wordList,guesses);
         //System.out.println(result[0]+": "+result[1]);
         //System.out.println("size: "+wordList.size());
         //guesses = wordList.sortMax(guesses,2);
-        //save(guesses,"src/sortedOptions3.txt");
+        save(guesses,"src/sortedOptions6.txt");
     }
 
     public static void save(ArrayList<String> results,String file){
